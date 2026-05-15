@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Clash YAML Repair Studio</title>
+  <meta name="description" content="修复 Clash YAML 乱码，还原 Unicode 转义字符，保持原始 YAML 结构。" />
+
+  <link rel="stylesheet" href="/style.css" />
+</head>
+
+<body>
+  <div class="background-glow glow-a"></div>
+  <div class="background-glow glow-b"></div>
+  <div class="background-glow glow-c"></div>
+
+  <main class="page">
+    <section class="hero glass-panel">
+      <div class="hero-content">
+        <div class="eyebrow">
+          <span class="dot"></span>
+          YAML Repair Tool
+        </div>
+
+        <h1>Clash YAML Repair Studio</h1>
+
+        <p class="hero-subtitle">
+          修复乱码，还原 Unicode 转义字符，保持原始 YAML 结构。
+        </p>
+
+        <p class="hero-desc">
+          支持上传本地 <strong>.yaml / .yml</strong> 文件，也支持输入 YAML 订阅链接进行即时修复。
+          当前版本不会保存你的配置，也不会生成公开链接。
+        </p>
+
+        <div class="hero-actions">
+          <a href="#input" class="btn btn-primary">
+            <span class="icon">↑</span>
+            开始修复
+          </a>
+          <a href="#features" class="btn btn-ghost">
+            查看能力
+          </a>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="visual-card">
+          <div class="visual-header">
+            <span class="window-dot red"></span>
+            <span class="window-dot yellow"></span>
+            <span class="window-dot green"></span>
+            <span class="visual-title">fixed.yaml</span>
+          </div>
+
+          <pre class="visual-code"><code>proxies:
+  - name: 香港节点
+    type: vmess
+    server: example.com
+    port: 443
+
+status: repaired</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <section id="input" class="input-grid">
+      <article class="glass-card input-card">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 16V4m0 0 4 4m-4-4-4 4M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/>
+          </svg>
+        </div>
+
+        <h2>上传 YAML 文件</h2>
+        <p>
+          选择本地 .yaml 或 .yml 文件，系统会自动修复乱码与转义字符。
+        </p>
+
+        <label class="upload-zone" id="uploadZone">
+          <input id="fileInput" type="file" accept=".yaml,.yml" />
+          <span class="upload-main">点击选择 YAML 文件</span>
+          <span class="upload-sub">支持 .yaml / .yml，最大 5MB</span>
+          <span class="upload-file" id="selectedFile">尚未选择文件</span>
+        </label>
+
+        <button class="btn btn-primary full" id="fileBtn">
+          上传并修复
+        </button>
+      </article>
+
+      <article class="glass-card input-card">
+        <div class="card-icon violet">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M10 13a5 5 0 0 0 7.07 0l2.12-2.12a5 5 0 0 0-7.07-7.07L11 4.93"/>
+            <path d="M14 11a5 5 0 0 0-7.07 0L4.81 13.12a5 5 0 0 0 7.07 7.07L13 19.07"/>
+          </svg>
+        </div>
+
+        <h2>订阅链接修复</h2>
+        <p>
+          输入返回 YAML 内容的订阅地址，由 Cloudflare Pages Function 拉取并修复。
+        </p>
+
+        <input
+          id="urlInput"
+          class="url-input"
+          type="url"
+          placeholder="https://example.com/clash.yaml"
+        />
+
+        <div class="hint">
+          当前版本仅支持 YAML 格式订阅，暂不解析 vmess / vless / trojan / ss 协议列表。
+        </div>
+
+        <button class="btn btn-primary full" id="urlBtn">
+          拉取并修复
+        </button>
+      </article>
+    </section>
+
+    <section id="features" class="features">
+      <article class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
+        </div>
+        <h3>结构保留</h3>
+        <p>不套用模板，不强行重组配置，只在原 YAML 基础上修复字符内容。</p>
+      </article>
+
+      <article class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24"><path d="m12 3 1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3Z"/></svg>
+        </div>
+        <h3>乱码修复</h3>
+        <p>自动尝试修复常见 UTF-8 mojibake 乱码，让节点名称恢复可读。</p>
+      </article>
+
+      <article class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24"><path d="M8 4H6a2 2 0 0 0-2 2v2m12-4h2a2 2 0 0 1 2 2v2M8 20H6a2 2 0 0 1-2-2v-2m12 4h2a2 2 0 0 0 2-2v-2"/><path d="M9 12h6"/></svg>
+        </div>
+        <h3>Unicode 还原</h3>
+        <p>将 \uXXXX 与 \UXXXXXXXX 转换为真实字符，并处理多余的引号转义。</p>
+      </article>
+
+      <article class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M5 21h14"/></svg>
+        </div>
+        <h3>快速导出</h3>
+        <p>修复完成后可以直接复制结果，或下载为新的 YAML 文件。</p>
+      </article>
+    </section>
+
+    <section class="result-section glass-panel" id="resultPanel">
+      <div class="result-header">
+        <div>
+          <div class="eyebrow small">
+            <span class="dot"></span>
+            Result
+          </div>
+          <h2>修复结果</h2>
+          <p>运行日志、结构统计与修复后的 YAML 内容会显示在这里。</p>
+        </div>
+
+        <div class="status-pill" id="statusPill">
+          Ready
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <span>类型</span>
+          <strong id="statType">--</strong>
+        </div>
+        <div class="stat-card">
+          <span>节点</span>
+          <strong id="statProxies">--</strong>
+        </div>
+        <div class="stat-card">
+          <span>策略组</span>
+          <strong id="statGroups">--</strong>
+        </div>
+        <div class="stat-card">
+          <span>规则</span>
+          <strong id="statRules">--</strong>
+        </div>
+      </div>
+
+      <div class="panels-grid">
+        <article class="code-panel">
+          <div class="panel-title">
+            <span>运行日志</span>
+            <button class="mini-btn" id="clearBtn">清空</button>
+          </div>
+          <pre id="logBox">等待处理...</pre>
+        </article>
+
+        <article class="code-panel">
+          <div class="panel-title">
+            <span id="outputName">fixed.yaml</span>
+            <div class="panel-actions">
+              <button class="mini-btn" id="copyBtn">复制</button>
+              <button class="mini-btn primary" id="downloadBtn">下载</button>
+            </div>
+          </div>
+          <pre id="outputBox">处理完成后，修复后的 YAML 会显示在这里。</pre>
+        </article>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p>
+        当前版本仅进行即时修复，不保存文件，不生成公开订阅链接。
+      </p>
+    </footer>
+  </main>
+
+  <script src="/app.js"></script>
+</body>
+</html>
