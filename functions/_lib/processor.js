@@ -59,21 +59,50 @@ export function repairYamlText(rawText) {
   logs.push("读取内容完成");
   logs.push(`原始大小：${formatBytes(utf8Size(text))}`);
 
-  logs.push("清理控制字符");
-  text = cleanControlChars(text);
-
+  /**
+   * 重点：
+   * 必须先修复 mojibake，再清理控制字符。
+   *
+   * 因为很多 UTF-8 mojibake 会包含 \x80-\x9F 范围内的字符，
+   * 例如：
+   *   å°æ¹¾ -> 台湾
+   *   æ–°åŠ å¡ -> 新加坡
+   *
+   * 如果提前清理控制字符，会把关键字节删掉，导致无法还原。
+   */
   logs.push("修复常见 UTF-8 mojibake 乱码");
   text = fixMojibakeText(text);
 
-  logs.push("处理多余的引号转义");
-  text = text.replace(/\\"/g, '"');
+  logs.push("清理残留控制字符");
+  text = cleanControlChars(text);
 
   logs.push("解析 YAML");
+
   let data;
+  let parseError = null;
+
   try {
     data = yaml.load(text);
   } catch (err) {
-    throw new Error(`YAML 解析失败：${err.message}`);
+    parseError = err;
+  }
+
+  /**
+   * fallback:
+   * 某些输入可能是被额外转义过的 YAML 文本。
+   * 只有原始 YAML 解析失败时，才尝试替换 \" 后再解析。
+   */
+  if (data === undefined && parseError) {
+    logs.push("原始 YAML 解析失败，尝试兼容模式解析");
+
+    const fallbackText = text.replace(/\\"/g, '"');
+
+    try {
+      data = yaml.load(fallbackText);
+      logs.push("兼容模式解析成功");
+    } catch {
+      throw new Error(`YAML 解析失败：${parseError.message}`);
+    }
   }
 
   if (data === null || data === undefined) {
@@ -84,6 +113,7 @@ export function repairYamlText(rawText) {
   data = convertAll(data);
 
   logs.push("重新生成 YAML");
+
   const output = yaml.dump(data, {
     noRefs: true,
     sortKeys: false,
