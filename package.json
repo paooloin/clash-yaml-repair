@@ -1,0 +1,17 @@
+{
+  "name": "clash-yaml-repair",
+  "version": "1.0.0",
+  "description": "A Cloudflare Pages tool for repairing Clash YAML files and YAML subscription links.",
+  "type": "module",
+  "private": true,
+  "dependencies": {
+    "js-yaml": "^4.1.0"
+  },
+  "devDependencies": {
+    "wrangler": "^3.99.0"
+  },
+  "scripts": {
+    "dev": "wrangler pages dev public",
+    "deploy": "wrangler pages deploy public"
+  }
+}
