@@ -30,7 +30,7 @@
         </p>
 
         <p class="hero-desc">
-          支持上传本地 <strong>.yaml / .yml</strong> 文件，也支持输入 YAML 订阅链接进行即时修复。
+          支持上传本地任意后缀的文件（内容须为 YAML 格式），也支持输入 YAML 订阅链接进行即时修复。
           当前版本不会保存你的配置，也不会生成公开链接。
         </p>
 
@@ -75,13 +75,13 @@ status: repaired</code></pre>
 
         <h2>上传 YAML 文件</h2>
         <p>
-          选择本地 .yaml 或 .yml 文件，系统会自动修复乱码与转义字符。
+          选择本地文件（任意后缀，内容须为 YAML 格式），系统会自动修复乱码与转义字符。
         </p>
 
         <label class="upload-zone" id="uploadZone">
-          <input id="fileInput" type="file" accept=".yaml,.yml" />
-          <span class="upload-main">点击选择 YAML 文件</span>
-          <span class="upload-sub">支持 .yaml / .yml，最大 5MB</span>
+          <input id="fileInput" type="file" />
+          <span class="upload-main">点击选择文件</span>
+          <span class="upload-sub">支持任意后缀，内容须为 YAML 格式，最大 5MB</span>
           <span class="upload-file" id="selectedFile">尚未选择文件</span>
         </label>
 
