@@ -72,13 +72,7 @@ async function processFile() {
   const file = fileInput.files?.[0];
 
   if (!file) {
-    alert("请先选择 YAML 文件");
-    return;
-  }
-
-  const lower = file.name.toLowerCase();
-  if (!lower.endsWith(".yaml") && !lower.endsWith(".yml")) {
-    alert("当前版本仅支持 .yaml / .yml 文件");
+    alert("请先选择文件");
     return;
   }
 
