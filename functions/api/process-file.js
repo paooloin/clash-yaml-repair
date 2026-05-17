@@ -1,7 +1,7 @@
 import {
   repairYamlText,
-  buildFixedFilename,
-  assertYamlFilename
+  buildFixedFilename
+  // assertYamlFilename 已移除，不再导入
 } from "../_lib/processor.js";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
@@ -15,11 +15,12 @@ export async function onRequestPost(context) {
     if (!file || typeof file === "string") {
       return json({
         ok: false,
-        error: "请上传 YAML 文件"
+        error: "请上传文件"
       }, 400);
     }
 
-    assertYamlFilename(file.name);
+    // 删除了 assertYamlFilename(file.name)
+    // 不再校验文件后缀，内容合法性由 repairYamlText 中的 yaml.load() 保证
 
     if (file.size > MAX_FILE_SIZE) {
       return json({
