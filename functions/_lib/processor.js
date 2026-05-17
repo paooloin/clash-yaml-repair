@@ -329,17 +329,6 @@ export function buildFixedFilename(filename = "subscription.yaml") {
   const name = safe.slice(0, idx);
   const ext = safe.slice(idx).toLowerCase();
 
-  if (ext === ".yaml" || ext === ".yml") {
-    return `${name}_fixed${ext}`;
-  }
-
-  return `${name}_fixed.yaml`;
-}
-
-export function assertYamlFilename(filename = "") {
-  const lower = filename.toLowerCase();
-
-  if (!lower.endsWith(".yaml") && !lower.endsWith(".yml")) {
-    throw new Error("当前版本仅支持 .yaml / .yml 文件");
-  }
+  // 保留原始后缀，统一加 _fixed
+  return `${name}_fixed${ext}`;
 }
