@@ -52,12 +52,6 @@ uploadZone.addEventListener("drop", (event) => {
 
   if (!file) return;
 
-  const lower = file.name.toLowerCase();
-  if (!lower.endsWith(".yaml") && !lower.endsWith(".yml")) {
-    alert("当前版本仅支持 .yaml / .yml 文件");
-    return;
-  }
-
   const transfer = new DataTransfer();
   transfer.items.add(file);
   fileInput.files = transfer.files;
